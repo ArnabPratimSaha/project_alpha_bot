@@ -1,6 +1,6 @@
 const GuildModel=require('../dataBase/models/guildModel');
 
-const ROLE=require('../config/configRoles');
+const {ROLE}=require('../config/configRoles');
 
 const storeOrRefreshDataOfGuild = async (guild, roleID) => {
     try {

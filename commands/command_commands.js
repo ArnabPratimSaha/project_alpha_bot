@@ -4,7 +4,8 @@ const command=require('../config/configCommand');
 const commands= async(channel)=>{
     try {
         const embededMessage=new Discord.MessageEmbed();
-        embededMessage.addField(`**${command.log.command}**`,command.log.description);
+        embededMessage.addField(command.setup.command,command.setup.description);
+        embededMessage.addField(command.log.command,command.log.description);
         embededMessage.addField(command.help.command,command.help.description);
         embededMessage.addField(command.commands.command,command.commands.description);
         embededMessage.addField(command.create.command,command.create.description);
