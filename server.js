@@ -16,6 +16,7 @@ connectMongo();
 
 const createRole=require("./actions/createNewRole");
 const command=require('./config/configCommand');
+const { PREFIX } = require("./config/configRoles");
 
 // =======================List of commands====================
 const command_commands= require('./commands/command_commands');
@@ -24,16 +25,14 @@ const { command_log } = require("./commands/command_log");
 const { command_manage } = require("./commands/command_manage");
 const { command_create } = require("./commands/command_create");
 const { command_add } = require("./commands/command_add");
-const { PREFIX } = require("./config/configRoles");
 const { command_setup } = require("./commands/command_setup");
 
 // ====================login as the bot=====================
 client.login(process.env.TOKEN);
 
 // ====================Event triggered when the bot is ready to start working=====================
-client.on('ready', () => {
+client.on('ready',() => {
   console.log(`Logged in as ${client.user.tag}!`);
-
   client.guilds.cache.map(g=>{
       createRole(client,g);
   })
@@ -66,7 +65,7 @@ client.on('message',async msg => {
       }
       else if(msg.content===command.create.command)
       {
-        await command_create(msg.channel);
+        await command_create(msg.channel,msg.author);
       }
       else if(msg.content===command.add.command)
       {
@@ -78,21 +77,21 @@ client.on('message',async msg => {
       if(msg.content===`${PREFIX}setup`)
       {
         const {status,role,error}= await command_setup(msg.guild,msg.content,msg.member);
-        if(error)
-        {
-          return msg.reply(`something went wrong`);
-        }
-        if(!status && !error && !role)
+        if(!status && !error && !role)//if the person doesn't have any permission
         {
           return msg.reply(`you dont have administrator permission`)
         }
-        if(status && role)
+        if(status && role)//role is successfully created
         {
-          return msg.reply(`Role created successfully`);
+          return msg.reply(`Role **${role.name}** has been created successfully`);
         }
-        if(!status && role)
+        if(!status && role)//role was already created
         {
-          return msg.reply(`Role already created`);
+          return msg.reply(`Role **${role.name}** was already created\nif you want to run setup again then delete the role **${role.name}**`);
+        }
+        else
+        {
+          return msg.reply(`something went wrong`);
         }
       }
     }
