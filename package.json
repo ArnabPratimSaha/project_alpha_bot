@@ -1,0 +1,26 @@
+{
+  "name": "project_alpha_bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArnabPratimSaha/project_alpha_bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ArnabPratimSaha/project_alpha_bot/issues"
+  },
+  "homepage": "https://github.com/ArnabPratimSaha/project_alpha_bot#readme",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "dotenv": "^9.0.2",
+    "mongoose": "^5.12.8"
+  }
+}
