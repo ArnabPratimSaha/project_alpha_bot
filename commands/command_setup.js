@@ -3,8 +3,6 @@ const { ROLE } = require('../config/configRoles');
 const GuildModel=require('../dataBase/models/guildModel');
 const { createDiscordRole, storeOrRefreshDataOfGuild } = require('../utilFunctions/roleManager');
 const findRole= (roles,roleName)=>{
-    
-    let foundRoles=[];
     for (let i = 0; i < roles.length; i++) {
         const role = roles[i];
         if(role.name==roleName)
