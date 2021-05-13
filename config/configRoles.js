@@ -4,4 +4,5 @@ const ROLE={
     ROLE_NAME :'mod_mail',
     ROLE_COLOR :'BLUE'
 }
-module.exports=ROLE;
+const PREFIX="^"
+module.exports={ROLE,PREFIX};

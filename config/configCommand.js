@@ -1,4 +1,4 @@
-const ROLE=require('./configRoles');
+const {ROLE,PREFIX}=require('./configRoles');
 
 const botCommand={
     log:{
@@ -7,7 +7,7 @@ const botCommand={
     },
     setup:{
         command:'setup',
-        description:`add a bot to your server and ready your server to have the feature **(only if you the role ${ROLE.ROLE_NAME})**`
+        description:`add a bot to your server and ready your server to have the feature **(only if you the role ${ROLE.ROLE_NAME})** **(only available in the server chat [prefix  ${PREFIX}])**`
     },
     help:{
         command:'help',
