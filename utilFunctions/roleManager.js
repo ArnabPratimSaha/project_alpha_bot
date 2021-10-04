@@ -27,20 +27,19 @@ const storeOrRefreshDataOfGuild = async (guild, roleID) => {
     }
 }
 const createDiscordRole = async guild => {
-    if (!guild.roles.cache.find(role => role.name ===  ROLE.ROLE_NAME)) {
-      try {
-        const role = await guild.roles.create({
-          data: {
-            name: ROLE.ROLE_NAME,
-            color: ROLE.ROLE_COLOR,
-          },
+  try {
+    const roles = await guild.roles.fetch();
+    if (!roles.find(role => role.name === ROLE.ROLE_NAME)) {
+      const newRole = await guild.roles.create({
+          name: ROLE.ROLE_NAME,
+          color: ROLE.ROLE_COLOR,
           reason: 'role created for the user to be able to use the bot',
-        });
-        return {status:true,role:role};
-      } catch (error) {
-          return {status:false,role:null};
-      }
+      });
+      return { isNew: true, role: { name:newRole } };
     }
-    return {status:false,role:guild.roles.cache.find(role => role.name === ROLE.ROLE_NAME)};
+    return { isNew: false, role: roles.find(role => role.name === ROLE.ROLE_NAME) };
+  } catch (error) {
+    return { isNew: false, role: null };
+  }
 }
-module.exports={storeOrRefreshDataOfGuild,createDiscordRole};
+module.exports = { storeOrRefreshDataOfGuild, createDiscordRole };
