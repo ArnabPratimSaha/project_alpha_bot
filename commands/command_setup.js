@@ -4,7 +4,7 @@ const { ROLE } = require('../config/configRoles');
 const GuildModel=require('../dataBase/models/guildModel');
 const { createDiscordRole, storeOrRefreshDataOfGuild } = require('../utilFunctions/roleManager');
 
-const command_setup = async (guild, channel, member) => {
+const command_setup = async (guild, member) => {
     try {
         if (!member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
             return { status: false, role: null, error: null };
@@ -14,7 +14,7 @@ const command_setup = async (guild, channel, member) => {
             return { status: false, role: roles.find(r=>r.name===ROLE.ROLE_NAME), error: null };
         }
         if (!roles.find(r=>r.name===ROLE.ROLE_NAME)) {
-            const role=await createRole(guild,channel);
+            const role=await createRole(guild);
             return { status: true, role: role, error: null };
         }
     } catch (error) {

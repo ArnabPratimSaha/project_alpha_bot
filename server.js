@@ -58,12 +58,7 @@ client.on('ready',async() => {
   try {
     console.log(`Logged in as ${client.user.tag}!`);
     client.guilds.cache.map(async g=>{
-      const channels=await g.channels.fetch();
-      let channel = channels;
-      if (channels.size > 1) {
-        channel = channels.find(e => e.type === 'GUILD_TEXT')
-      }
-      createRole(g, channel);
+      createRole(g);
     })
     handleMessageSent(client);
     MessageModel.watch().on('change', async (change) => {
@@ -109,7 +104,7 @@ client.on('messageCreate',async msg => {
     {
       if(msg.content===`${PREFIX}setup`)
       {
-        const {status,role,error}= await command_setup(msg.guild,msg.channel,msg.member);
+        const {status,role,error}= await command_setup(msg.guild,msg.member);
         if(error)return msg.reply(`something went wrong.`);
         if(!status && !role)return msg.reply(`Only members with **Administrator** role have the permission to ceate or update role.`);
         if(!status && role)return msg.reply(`ROLE ${role} is already created.Delete the role inorder to create another.`);
