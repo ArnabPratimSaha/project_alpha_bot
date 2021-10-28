@@ -6,6 +6,13 @@ const messageType={
     CHANNEL:'CHANNEL',
     DM:'DM'
 }
+const getArray=collection=>{
+    let array=[];
+    collection.each(g=>{
+        array.push(g);
+    })
+    return array;
+}
 const getRoles=async(guild,roleIds)=>{
     try {
         var string=``;
@@ -53,18 +60,18 @@ const sendMessage=async(data,client)=>{
         embeded.setTitle(data.title);
         embeded.addField('Message Body:',data.message);
         embeded.setColor('BLURPLE');
-        const user=await client.users.fetch(data.sender);
+        const user = await client.users.fetch(data.sender);
         embeded.setFooter(`message sent by ${user.username}`)
         if (data.type===messageType.CHANNEL) {
-            const validChannels = getQueryChannels(data.channels, guild.channels.cache.array());
+            const validChannels = getQueryChannels(data.channels, getArray(guild.channels.cache));
             validChannels.forEach(async (c) => {
                 const roleNames=await getRoles(guild,data.role);
-                console.log(roleNames);
                 try {
                     const names=await getNames(client,data.members)
-                    await c.send(`${names} ${roleNames}`, { embed: embeded });
+                    await c.send({content:`${names} ${roleNames}`, embeds:[embeded] });
+                    await c.send(button)
                 } catch (e) {
-                    console.log('could not send a message');//work
+                    console.log('could not send a message to channel');//work
                     await deleteDoc(data.messageId);
                     await changeStatus(status.CANCELLED,data.messageId);
                 }
@@ -78,7 +85,7 @@ const sendMessage=async(data,client)=>{
             const response = await client.users.fetch(e);
             if (response) {
                 try {
-                    await response.send('message', { embed: embeded })
+                    await response.send({content:`message`, embeds:[embeded] });
                 } catch (e) {
                     console.log('could not send a message');//work
                     await deleteDoc(data.messageId);

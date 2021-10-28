@@ -8,7 +8,7 @@ const storeOrRefreshDataOfGuild = async (guild, roleID) => {
       if (response)//guild is already registered
       {
         response.roleID = roleID;
-        await response.save();
+        response.guildName=guild.name;
         return true;
       }
       else //registering the guild

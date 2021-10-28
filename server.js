@@ -22,7 +22,6 @@ const { PREFIX } = require("./config/configRoles");
 const command_commands= require('./commands/command_commands');
 const command_help = require('./commands/command_help');
 const { command_log } = require("./commands/command_log");
-const { command_manage } = require("./commands/command_manage");
 const { command_create } = require("./commands/command_create");
 const { command_add } = require("./commands/command_add");
 const { command_setup } = require("./commands/command_setup");
@@ -30,6 +29,7 @@ const { command_setup } = require("./commands/command_setup");
 const {MessageModel}=require('./dataBase/models/messageModel');
 const { findData, getQueryRoles, getQueryChannels } = require("./utilFunctions/findClosestTimeDoc");
 const { sendMessage } = require("./utilFunctions/sendMessage");
+const { saveUpdateGuild } = require("./utilFunctions/manageGuilds");
 
 // ====================login as the bot=====================
 client.login(process.env.TOKEN);
@@ -58,7 +58,8 @@ client.on('ready',async() => {
   try {
     console.log(`Logged in as ${client.user.tag}!`);
     client.guilds.cache.map(async g=>{
-      createRole(g);
+      await createRole(g);
+      await saveUpdateGuild(g)
     })
     handleMessageSent(client);
     MessageModel.watch().on('change', async (change) => {
@@ -85,11 +86,7 @@ client.on('messageCreate',async msg => {
       }
       else if(msg.content===command.log.command)
       {
-        await command_log(msg.channel);
-      }
-      else if(msg.content===command.manage.command)
-      {
-        await command_manage(msg.channel);
+        await command_log(msg.channel,msg.author,client);
       }
       else if(msg.content===command.create.command)
       {
@@ -97,7 +94,7 @@ client.on('messageCreate',async msg => {
       }
       else if(msg.content===command.add.command)
       {
-        await command_add(msg.content);
+        await command_add(msg.channel,msg.author);
       }
     }
     else if(msg.channel.type==='GUILD_TEXT')//text channel massage
@@ -114,4 +111,8 @@ client.on('messageCreate',async msg => {
   } catch (error) {
     console.log(error);
   }
+});
+client.on('interactionCreate', interaction => {
+	if (!interaction.isButton()) return;
+	console.log(interaction);
 });
