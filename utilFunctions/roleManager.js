@@ -8,7 +8,7 @@ const storeOrRefreshDataOfGuild = async (guild, roleID) => {
       if (response)//guild is already registered
       {
         response.roleID = roleID;
-        await response.save();
+        response.guildName=guild.name;
         return true;
       }
       else //registering the guild
@@ -35,11 +35,11 @@ const createDiscordRole = async guild => {
           color: ROLE.ROLE_COLOR,
           reason: 'role created for the user to be able to use the bot',
       });
-      return { isNew: true, role: { name:newRole } };
+      return { isNew: true, role: newRole,error:null };
     }
-    return { isNew: false, role: roles.find(role => role.name === ROLE.ROLE_NAME) };
+    return { isNew: false, role: roles.find(role => role.name === ROLE.ROLE_NAME),error:null };
   } catch (error) {
-    return { isNew: false, role: null };
+    return { isNew: false, role: null,error:error };
   }
 }
 module.exports = { storeOrRefreshDataOfGuild, createDiscordRole };

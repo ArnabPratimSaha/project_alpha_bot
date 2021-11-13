@@ -25,9 +25,5 @@ const botCommand={
         command:'add',
         description:`get a link to add this bot in your server`
     },
-    manage:{
-        command:'manage',
-        description:`manage your massages **(only if you the role ${ROLE.ROLE_NAME})**`
-    },
 }
 module.exports=botCommand;
