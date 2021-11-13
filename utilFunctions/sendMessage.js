@@ -33,10 +33,10 @@ const changeStatus=async(status,messageId)=>{
         if(response.status===200)
             return;
     } catch (error) {
-        if(axios.isError(error))
-        {
-            return ;
-        }
+        // if(axios.isError(error))
+        // {
+        //     return ;
+        // }
     }
 }
 const getNames=async(clent,id)=>{
@@ -61,7 +61,8 @@ const sendMessage=async(data,client)=>{
         embeded.addField('Message Body:',data.message);
         embeded.setColor('BLURPLE');
         const user = await client.users.fetch(data.sender);
-        embeded.setFooter(`message sent by ${user.username}`)
+        embeded.setFooter(`Created By VIVI`);
+        embeded.setTimestamp(new Date());
         if (data.type===messageType.CHANNEL) {
             const validChannels = getQueryChannels(data.channels, getArray(guild.channels.cache));
             validChannels.forEach(async (c) => {
@@ -69,7 +70,6 @@ const sendMessage=async(data,client)=>{
                 try {
                     const names=await getNames(client,data.members)
                     await c.send({content:`${names} ${roleNames}`, embeds:[embeded] });
-                    await c.send(button)
                 } catch (e) {
                     console.log('could not send a message to channel');//work
                     await deleteDoc(data.messageId);

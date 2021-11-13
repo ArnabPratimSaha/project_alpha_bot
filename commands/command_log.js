@@ -1,7 +1,9 @@
 const Discord = require('discord.js');
 const axios = require('axios');
 const toggleIndex = ['all', 'sent', 'processing', 'cancelled'];
-const { getQueryChannels } = require('../utilFunctions/findClosestTimeDoc')
+const { getQueryChannels } = require('../utilFunctions/findClosestTimeDoc');
+const { LinkModel } = require('../dataBase/models/linkModel');
+const { v4: uuidv4 } = require('uuid');
 const getArray = collection => {
     let array = [];
     collection.each(g => {
@@ -75,8 +77,15 @@ const message = async (client, index, max, targetGuild, sender, messageType, mem
 }
 const command_log = async (channel, author, client) => {
     try {
+        const existingData = await LinkModel.findOneAndDelete({discordId:author.id});
+        const entryId=uuidv4();
+        const link=new LinkModel({
+            discordId:author.id,
+            entryId:entryId,
+            entryTime:new Date()
+        })
+        await link.save();
         const res = await axios.get(`${process.env.BACKENDAPI}log/searchinfo?limit=${3}&page=${1}&type=${toggleIndex[2]}&did=${author.id}&fav=${false}`);
-        let embededMessages = [];
         const response = await channel.send({ content: 'log' });
         for (let i = 0; i < res.data.length; i++) {
             const data = res.data[i];
@@ -90,6 +99,7 @@ const command_log = async (channel, author, client) => {
             embededMessage.setTimestamp(new Date());
             const response = await channel.send({ content: await message(client, i, res.data.length, data.targetGuild, author.id, data.messageType, data.members, data.role, data.channels, epoch), embeds: [embededMessage] });
         }
+        await channel.send({ content: `<@${author.id}> For full log visit VIVI :globe_with_meridians: :${process.env.FRONTENDAPI}val/${author.id}/${entryId}/dashboard` });
     } catch (error) {
         console.log(error);
     }
