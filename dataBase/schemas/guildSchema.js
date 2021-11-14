@@ -6,6 +6,6 @@ const guildSchema=new mongoose.Schema({
     roleID:{type:String,required:true},
     guildAvater:{type:String},
     guildMemberCount:{type:Number},
-    isPartnered:{type:Boolean}
+    isPartnered:{type:Boolean},
 });
 module.exports=guildSchema;

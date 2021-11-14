@@ -6,9 +6,14 @@ const { storeOrRefreshDataOfGuild, createDiscordRole } = require('../utilFunctio
 
 const createRole = async (guild) => {
   try {
-    const { isNew, role, error } = await createDiscordRole(guild);
+    const { success, role, error } = await createDiscordRole(guild);
     if (error) throw error;
-    await storeOrRefreshDataOfGuild(guild, role.id)
+    if (!success) {
+
+    }
+    if (success && role) {
+      await storeOrRefreshDataOfGuild(guild, role.id);
+    }
     return role;
   } catch (error) {
     console.log(error);
