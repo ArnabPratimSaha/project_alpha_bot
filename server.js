@@ -150,7 +150,12 @@ client.on('guildCreate', async (g) => {
   try {
     await createRole(g);
     await saveUpdateGuild(g);
-
+    const guildData=await GuildModel.findOne({guildID: g.id});
+    if(guildData)
+    {
+      guildData.status = true;
+      await guildData.save();
+    }
     const roleData = await RoleModel.findOne({ guildId: g.id });
     if (roleData) {
       roleData.guildStatus = true;
@@ -162,6 +167,12 @@ client.on('guildCreate', async (g) => {
 });
 client.on('guildDelete', async (g) => {
   try {
+    const guildData=await GuildModel.findOne({guildID: g.id});
+    if(guildData)
+    {
+      guildData.status = false;
+      await guildData.save();
+    }
     const roleData = await RoleModel.findOne({ guildId: g.id });
     if (roleData) {
       roleData.guildStatus = false;
