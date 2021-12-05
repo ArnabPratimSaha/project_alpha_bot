@@ -60,6 +60,7 @@ const handleMessageSent = async (client) => {
 client.on('ready', async () => {
   try {
     console.log(`Logged in as ${client.user.tag}!`);
+    client.user.setActivity('DM me commands',{ type: 'LISTENING' })
     client.guilds.cache.map(async g => {
       await createRole(g);
       await saveUpdateGuild(g)
