@@ -19,8 +19,10 @@ const getRoles = async (guild, roleIds) => {
         for (let i = 0; i < roleIds.length; i++) {
             const e = roleIds[i];
             const role = await guild.roles.fetch(e);
-            if (role)
-                string += ` <@&${role.id}>`
+            if (role) {
+                if (role.name === '@everyone') string += ` ${role.name}`;
+                else string += ` <@&${role.id}>`
+            }
         }
         return string;
     } catch (error) {
